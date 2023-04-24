@@ -1,0 +1,127 @@
+.wrapper {
+  height: 90%;
+  width: 90%;
+  display: flex;
+  gap: min(3rem, 100%);
+  justify-content: center;
+  align-items: center;
+  padding-top: 2rem;
+}
+
+.aside {
+  height: calc(100% - 1rem);
+  width: 80%;
+  align-self: flex-start;
+  max-width: 750px;
+  background: white;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.aside > div:first-child {
+  font-size: 1.25rem;
+  font-weight: bolder;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding-top: 0;
+  padding-left: 0;
+}
+
+.aside > header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-weight: bolder;
+  margin-bottom: 1rem;
+}
+
+.caption {
+  resize: none;
+  outline: none;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  height: 150px;
+  width: 100%;
+}
+
+.aside > div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--lightGrey);
+}
+
+.aside > div > section {
+  rotate: 180deg;
+  translate: calc(-1rem - 10px) calc(50% + 40px) !important;
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+.aside > div > section > div {
+  rotate: 180deg;
+}
+
+.aside > div > section::after {
+  right: 1rem;
+}
+
+.aside > div > svg {
+  cursor: pointer;
+}
+
+.footer > div {
+  height: 3.5rem;
+  font-weight: bolder;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 1rem;
+  border-bottom: 1px solid var(--lightGrey);
+}
+
+.alternativeText {
+  display: flex;
+  gap: 1rem;
+}
+
+.alternativeText:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.alternativeText > span {
+  height: 50px !important;
+  width: 50px !important;
+}
+
+.advancedSettings > div {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.addPeopleTagsWrapper > section > section {
+  overflow-x: hidden;
+  padding-top: 3rem !important;
+  height: 550px;
+}
+
+@media (max-width: 800px) {
+  .wrapper {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .aside {
+    align-self: center;
+    height: fit-content;
+  }
+}

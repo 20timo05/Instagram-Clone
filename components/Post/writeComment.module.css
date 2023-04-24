@@ -1,0 +1,69 @@
+.writeComment {
+  width: 100%;
+  resize: none;
+  outline: none;
+  border: none;
+  background: transparent;
+  height: 23px;
+  max-height: 81px;
+  font-family: inherit;
+}
+
+.post {
+  margin-left: auto;
+  border: none;
+  background: none;
+  color: var(--blue);
+  cursor: pointer;
+  font-weight: bolder;
+  font-size: 0.9rem;
+}
+
+.post.deactivated {
+  opacity: 0.5;
+  cursor: auto;
+}
+
+.footer {
+  position: relative;
+  margin-top: 1.5rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--lighterGrey);
+}
+
+.footer > form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer > form > svg {
+  cursor: pointer;
+}
+
+.responseMode {
+  background: var(--lighterGrey);
+  position: absolute;
+  top: -0.75rem;
+  left: 0;
+  width: calc(100% + 2rem);
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-top: 1px solid var(--darkGrey);
+  border-bottom: 1px solid var(--darkGrey);
+  translate: -1rem;
+  opacity: 0;
+  z-index: -1;
+  transition: 0.2s ease-in-out;
+}
+
+.responseMode > i {
+  cursor: pointer;
+}
+
+.responseMode.active {
+  translate: -1rem -100%;
+  opacity: 1;
+  z-index: 1;
+}

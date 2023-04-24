@@ -1,0 +1,113 @@
+.searchbarWrapper {
+  height: 3em;
+  min-width: 150px;
+  width: 350px;
+  margin: 0 2rem;
+  position: relative;
+}
+
+.searchbarWrapper > div {
+  font-size: 1.3rem;
+}
+
+.searchbarWrapper > div > p {
+  margin-left: calc(1.5rem + 2px);
+}
+
+.searchbarWrapper > div > input {
+  padding-left: 2rem;
+}
+
+.searchbarWrapper > div::after {
+  font-family: "Font Awesome 5 Free";
+  content: "\f002";
+  font-weight: 900;
+  font-size: 1rem;
+  position: absolute;
+  left: 1.125rem;
+  top: 50%;
+  translate: -50% -50%;
+}
+
+.searchOptionsWrapper {
+  height: fit-content;
+  max-height: 400px;
+  width: 400px;
+  background: white;
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  translate: -50% 100%;
+  box-shadow: var(--boxShadow);
+  z-index: 2;
+  overflow: auto;
+}
+
+.searchOptionsWrapper::after {
+  content: "";
+  display: block;
+  height: 0;
+  width: 0;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% -100%;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid white;
+}
+
+.lastSearchesHeader {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.lastSearchesHeader > span:first-child {
+  font-size: 1.25rem;
+  font-weight: bolder;
+}
+
+.lastSearchesHeader > span:last-child {
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.searchOptions {
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.searchOptions:hover {
+  background: var(--lighterGrey);
+}
+
+.searchOptions > span {
+  border-radius: 50%;
+}
+
+.searchOptions > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.searchOptions > i {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.searchOptions.focused {
+  background: var(--lighterGrey);
+}
+
+.noResultsFoundLabel {
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+  opacity: 0.5;
+}

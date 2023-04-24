@@ -1,0 +1,128 @@
+.selectionWrapper {
+  position: relative;
+}
+.selectionInputWrapper {
+  display: flex;
+  height: 3rem;
+}
+
+.select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  cursor: pointer;
+  background: var(--inBetweenLightGrey);
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.activeOption {
+  height: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9em;
+}
+
+.activeOption > span:last-child {
+  font-size: 0.5em;
+}
+
+.select > i {
+  margin-left: 0.5em;
+  font-size: 0.8em;
+  transition: 0.4s;
+}
+
+.select > i.optionsOpen {
+  transform: rotateX(180deg);
+}
+
+.selectOptionsWrapper {
+  position: absolute;
+  top: calc(3rem + 10px);
+  left: 0;
+  z-index: 5;
+  width: 100%;
+}
+
+.optionsWrapper {
+  max-height: 15rem;
+  overflow: auto;
+  background: var(--darkWhite);
+  box-shadow: var(--boxShadow);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: relative;
+  z-index: 5;
+}
+
+.optionsWrapper > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 1em;
+  cursor: pointer;
+}
+
+.optionsWrapper > div > div {
+  display: flex;
+  align-items: center;
+}
+
+.optionsWrapper > div > div > p {
+  margin: 0;
+  margin-left: 10px;
+}
+
+.optionsWrapper > div.active {
+  background: var(--lightGrey);
+}
+
+.optionsWrapper > div.currentSelect {
+  background: var(--lighterGrey);
+}
+
+.optionsWrapper > div > i {
+  display: none;
+}
+
+.optionsWrapper > div.active > i {
+  display: block;
+}
+
+.searchCountryInput {
+  border: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: var(--boxShadow);
+}
+
+.methodPicker {
+  position: absolute;
+  top: calc(-100% - 10px - 15px);
+  transform: translateX(-50%);
+  padding: 0.5em;
+  background: var(--darkWhite);
+  display: flex;
+  gap: 10px;
+  border: 1px solid black;
+}
+
+.methodPicker::after {
+  content: "";
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid black;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.methodPicker > span {
+  cursor: pointer;
+}
