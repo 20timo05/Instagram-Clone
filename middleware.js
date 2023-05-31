@@ -19,7 +19,7 @@ const allRoutesNotOnlyLoggedIn = [
 ];
 
 const adminRoutes = ["/api/faker", "/admin"];
-const admins = ["timodev"];
+const admins = ["trollfi"];
 
 export async function middleware(req) {
   const { pathname } = req.nextUrl;
