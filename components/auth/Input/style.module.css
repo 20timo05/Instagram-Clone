@@ -1,0 +1,106 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  outline: none;
+  border: 1px solid var(--lightGrey);
+  border-radius: 5px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  padding-left: 7px;
+  padding-right: 30px;
+  height: 3rem;
+  width: 100%;
+  font-size: 0.7em;
+  background: var(--darkWhite);
+}
+
+.input:focus {
+  border: 1px solid var(--darkGrey);
+}
+
+.placeholder {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 7px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--darkGrey);
+  font-size: 0.7em;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+  transition: 0.2s;
+}
+
+.placeholder.valueAnimation {
+  top: 20%;
+  font-size: 0.5em;
+}
+
+.input.valueAnimation {
+  padding-top: calc((28px + 0.3em) * 0.8);
+  padding-bottom: calc((28px + 0.3em) * 0.2);
+  font-size: 0.5em;
+}
+
+.optionsWrapper {
+  height: 1em;
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.iconWrapper {
+  height: 1em;
+  width: 1em;
+  border-radius: 100000px;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconWrapper.valid {
+  color: var(--green);
+  border: 1px solid var(--green);
+}
+
+.iconWrapper.invalid {
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+.iconWrapper > i {
+  font-size: 0.5em;
+}
+
+.iconWrapper > .errorMessages {
+  font-size: 0.5em;
+  position: absolute;
+  left: 100%;
+  width: 13rem;
+  text-align: left;
+  padding: 2em 3em;
+}
+
+.passwordVisible{
+  cursor: pointer;
+  font-size: 0.7em;
+  font-weight: 600;
+}
+
+.passwordVisible:active {
+  color: var(--darkGrey)
+}

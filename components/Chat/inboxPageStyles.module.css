@@ -1,0 +1,134 @@
+.wrapper {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 80vh;
+  width: 100%;
+  max-width: 950px;
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns:
+    min(calc(950px / 3), calc(100% / 3))
+    min(calc(2 * 950px / 3), calc(2 * 100% / 3));
+  background-color: var(--lightGrey);
+  gap: 1px;
+  border: 1.5px solid var(--lightGrey);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.wrapper > div,
+.wrapper > header,
+.wrapper > aside,
+.wrapper > section {
+  background: var(--darkWhite);
+}
+
+.wrapper > div {
+  display: grid;
+  grid-template-columns: 1fr 10px;
+  place-items: center;
+  font-size: 1.2rem;
+}
+
+.wrapper > div > i {
+  justify-self: flex-end;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.wrapper > div > span {
+  font-weight: bolder;
+}
+
+.wrapper > header {
+  display: flex;
+  align-items: center;
+  font-weight: bolder;
+}
+
+.wrapper > header > div {
+  scale: 0.6;
+}
+
+.wrapper > header > i {
+  margin-left: auto;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.chat {
+  display: grid;
+  grid-template-rows: 12px 18px 18px 12px;
+  grid-template-columns: 60px 1fr;
+  padding: 0.5rem;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chat:hover {
+  background: var(--lighterGrey);
+}
+
+.chat > span {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  grid-column: 2;
+  grid-row: 2;
+  margin-left: 0.5rem;
+}
+
+.chat > span:last-child {
+  grid-column: 2;
+  grid-row: 3;
+  color: var(--darkGrey);
+  opacity: 0.5;
+}
+
+.wrapper > section {
+  position: relative;
+}
+
+.startChat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+}
+
+.startChat > div {
+  font-size: 3rem;
+  padding: 1rem;
+  border: 2px solid black;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.startChat > div > i {
+  translate: -3px;
+}
+
+.startChat > h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.startChat > p {
+  text-align: center;
+  color: var(--darkGrey);
+  opacity: 0.5;
+  width: fit-content;
+}
+
+.startChat > button {
+  width: fit-content !important;
+  scale: 1.1;
+}

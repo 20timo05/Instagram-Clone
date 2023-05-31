@@ -1,0 +1,47 @@
+.header {
+  height: 80px;
+  width: 100vw;
+  max-width: 100%;
+  margin: 0;
+  padding: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--lightGrey);
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: var(--darkWhite);
+  z-index: 5;
+}
+
+.header > a {
+  display: flex !important;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.verticalLine {
+  height: 30px;
+  width: 1px;
+  background: var(--lightGrey);
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 25px;
+}
+
+.buttons > div {
+  height: 35px;
+  width: 35px;
+}
+
+.buttons > i,
+.buttons > div,
+.buttons > svg {
+  cursor: pointer;
+}

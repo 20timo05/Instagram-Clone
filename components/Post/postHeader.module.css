@@ -1,0 +1,106 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--lightGrey);
+  background: white;
+}
+
+.header > span,
+.header > h4 {
+  cursor: pointer;
+}
+
+.header.onTop {
+  padding: 0 10px;
+}
+
+.header > a {
+  margin-right: 10px !important;
+}
+
+.filler {
+  margin: 0 10px;
+  font-size: 2rem;
+}
+
+.link {
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.location {
+  width: 100%;
+  padding: 0 2rem;
+}
+
+.location > a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.location > a > i {
+  font-size: 1.5rem;
+}
+
+.header > i {
+  margin-left: auto;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.optionsWrapper > section > section {
+  padding: 0 !important;
+}
+
+.optionsWrapper > section > section > div {
+  font-size: 1.25rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--lightGrey);
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.optionsWrapper > section > section > div:last-child {
+  border: none;
+}
+
+.optionsWrapper > section > section > div:hover {
+  background: var(--lighterGrey);
+}
+
+.optionsWrapper > section > section > div.red {
+  color: red;
+}
+
+.shareWrapper > section > section > div {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.shareWrapper > section > section > div > i {
+  height: 2rem;
+  width: 2rem;
+  font-size: 1.6rem;
+  display: grid;
+  place-items: center;
+}
+
+.qrCodeWrapper > section > section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(90vw, 400px);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.qrCodeWrapper > section > section > p {
+  opacity: 0.5;
+}
+
+.qrCodeWrapper > section > section > div {
+  width: 100%;
+}

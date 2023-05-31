@@ -1,0 +1,29 @@
+.wrapper {
+  position: relative;
+  padding: 1rem;
+  width: 100%;
+  height: calc(80vh - 60px);
+}
+
+.wrapper > footer {
+  position: absolute;
+  bottom: 1rem;
+  width: calc(100% - 2rem);
+  border: 1px solid var(--lightGrey);
+  background: var(--darkWhite);
+  border-radius: 50000px;
+  padding: 0.5rem 1rem;
+  z-index: 5;
+}
+
+.wrapper > footer > footer {
+  margin-top: 0 !important;
+  border-top: none !important;
+}
+
+.wrapper > section {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 100px);
+  overflow: auto;
+}

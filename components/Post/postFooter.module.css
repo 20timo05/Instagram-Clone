@@ -1,0 +1,57 @@
+.footer {
+  height: fit-content;
+  border-top: 1px solid var(--lightGrey);
+}
+
+.footer.onTop {
+  border: none;
+}
+
+.footer > header {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 1.75rem;
+  margin-top: 0.5rem;
+}
+
+.footer > header i {
+  cursor: pointer;
+}
+
+.footer > header i:hover {
+  opacity: 0.5;
+}
+
+.footer > header > i:first-child {
+  transform: scaleX(-1);
+}
+
+.footer > header > span:last-child {
+  margin-left: auto;
+}
+
+.footer > section {
+  margin-top: 0.5rem;
+}
+
+.likes {
+  font-weight: bolder;
+  margin-bottom: 0.1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.footer > section > span {
+  opacity: 0.4;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.showComments {
+  display: block;
+  opacity: 0.4;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-bottom: -10px;
+}

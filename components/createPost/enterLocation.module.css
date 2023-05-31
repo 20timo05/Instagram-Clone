@@ -1,0 +1,17 @@
+.mapWrapper {
+  height: 80vh;
+  width: 80vw;
+}
+
+.mapWrapper > div {
+  height: 100%;
+  width: 100%;
+}
+
+.modalWrapper > section {
+  overflow: hidden !important;
+}
+
+.modalWrapper > section > section {
+  padding: 0 !important;
+}
