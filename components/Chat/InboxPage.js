@@ -14,22 +14,6 @@ export default function InboxPage({ data, currentLoggedInUser }) {
   const users = openChatIdx !== null && data[openChatIdx].group_members;
   const chatName = users && getChatName(users);
 
-  async function changeRoomHandler(idx) {
-    setOpenChatIdx(idx);
-    // leave previous room if user was in one already
-    if (openChatIdx !== null) {
-      await fetchData("POST", "/api/inbox/pusher/joinRoom", {
-        chatId: data[openChatIdx].id,
-        isJoining: false,
-      });
-    }
-    // join new room
-    await fetchData("POST", "/api/inbox/pusher/joinRoom", {
-      chatId: data[idx].id,
-      isJoining: true,
-    });
-  }
-
   return (
     <div className={styles.wrapper}>
       <div>
@@ -50,7 +34,7 @@ export default function InboxPage({ data, currentLoggedInUser }) {
           <div
             key={chat.id}
             className={styles.chat}
-            onClick={() => changeRoomHandler(idx)}
+            onClick={() => setOpenChatIdx(idx)}
           >
             <ChatProfileImage users={chat.group_members} />
             <span>{getChatName(chat.group_members)}</span>

@@ -13,44 +13,46 @@ export const pusher = new Pusher({
   useTLS: true,
 });
 
-async function checkUserAllowed(username, chatId) {
+async function getUserChats(username) {
   const query = `
     SELECT
-      *
+      group_id AS id
     FROM chat_group_members
     INNER JOIN users
       ON users.id = user_id
     WHERE
-      username = ? AND group_id = ?; 
+      username = ?; 
   `;
-  const result = await executeQuery({ query, values: [username, chatId] });
+  const result = await executeQuery({ query, values: [username] });
   if (result.error) return console.log(result.error);
 
-  return result.length > 0;
+  return result;
 }
 
 export default async function handler(req, res) {
-  const { chatId, isJoining } = req.body;
+  const { isJoining } = req.body;
 
   const username = await requireAuth(req, res);
-  const chatRoom = chatRoomsOnlineUsers.find((room) => room.id === chatId);
   if (isJoining) {
     // check if user is allowed to join the room
-    const userAllowed = await checkUserAllowed(username, chatId);
-    if (!userAllowed) {
-      return res
-        .status(401)
-        .json({ error: "You are not a member of this chat!" });
+    const userChats = await getUserChats(username);
+    for (let chat of userChats) {
+      const chatRoomAlreadyExists = chatRoomsOnlineUsers.find(
+        ({ id }) => id === chat.id
+      );
+      if (chatRoomAlreadyExists) {
+        if (!chatRoomAlreadyExists.members.includes(username)) {
+          chatRoomAlreadyExists.members.push(username);
+        }
+      } else {
+        chatRoomsOnlineUsers.push({ id: chat.id, members: [username] });
+      }
     }
-    if (chatRoom) {
-      chatRoom.members.push(username);
-    } else {
-      chatRoomsOnlineUsers.push({ id: chatId, members: [username] });
-    }
-  } else if (chatRoom) {
-    chatRoom.members.splice(chatRoom.members.indexOf(username), 1);
-    if (chatRoom.members.length === 0) {
-      chatRoomsOnlineUsers.splice(chatRoomsOnlineUsers.indexOf(chatRoom), 1);
+  } else {
+    for (let chat of chatRoomsOnlineUsers) {
+      if (chat.members.includes(username)) {
+        chat.members.splice(chat.members.indexOf(username), 1);
+      }
     }
   }
 

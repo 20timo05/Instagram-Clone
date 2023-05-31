@@ -1,14 +1,29 @@
+import { useEffect } from "react";
 import Head from "next/head";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 
 import Header from "../components/Header/index";
 import InboxPage from "../components/Chat/InboxPage";
+import { fetchData } from "../hooks/useFetch";
 
 import { getData as getUser } from "./api/user/getUser";
 import { getData as getChats } from "./api/inbox/getChats";
 
 export default function Home({ currentLoggedInUser, chatsData }) {
+  useEffect(() => {
+    // join new room
+    fetchData("POST", "/api/inbox/pusher/joinRoom", {
+      isJoining: true,
+    }).then(console.log);
+
+    return () => {
+      fetchData("POST", "/api/inbox/pusher/joinRoom", {
+        isJoining: false,
+      }).then(console.log);
+    };
+  }, []);
+
   return (
     <>
       <Head>
