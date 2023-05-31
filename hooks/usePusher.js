@@ -65,7 +65,8 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
     });
 
     // send message in realtime to other online users
-    await fetchData("POST", "/api/inbox/pusher/sendMessage", {
+    await fetchData("POST", "/api/inbox/pusher", {
+      type: "sendMessage",
       message: value,
       message_type: "text",
       chatId,

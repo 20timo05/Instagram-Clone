@@ -13,12 +13,14 @@ import { getData as getChats } from "./api/inbox/getChats";
 export default function Home({ currentLoggedInUser, chatsData }) {
   useEffect(() => {
     // join new room
-    fetchData("POST", "/api/inbox/pusher/joinRoom", {
+    fetchData("POST", "/api/inbox/pusher", {
+      type: "join",
       isJoining: true,
     }).then(console.log);
 
     return () => {
-      fetchData("POST", "/api/inbox/pusher/joinRoom", {
+      fetchData("POST", "/api/inbox/pusher", {
+        type: "join",
         isJoining: false,
       }).then(console.log);
     };
