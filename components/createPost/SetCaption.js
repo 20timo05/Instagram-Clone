@@ -11,8 +11,7 @@ import EnterLocation from "./EnterLocation";
 import Input from "../auth/Input/index";
 import Button from "../little/Button";
 import ToggleSwitch from "../little/ToggleSwitch";
-import Popup from "../PopUp";
-import SearchBar from "../Header/Searchbar";
+import PeopleSelector from "./PeopleSelector"
 import PeopleTag from "../Post/PeopleTag";
 import CaptionTextArea from "../Profile/CaptionTextArea";
 
@@ -228,22 +227,12 @@ export default function SetCaption({
         </aside>
       </div>
       {showPeopleTagPopup && (
-        <Popup
+        <PeopleSelector
           title="Personen markieren"
           close={() => setShowPeopleTagPopup(false)}
-          className={styles.addPeopleTagsWrapper}
-          style={{
-            transform: `scale(${Math.min((width * 0.9) / 446, 1)})`,
-            margin: `${(-650 + 650 * Math.min((width * 0.9) / 446, 1)) / 2}px`,
-          }}
-        >
-          <SearchBar
-            currentLoggedInUser={currentLoggedInUser}
-            onlyFollowers={true}
-            mostPopular={true}
-            onSelect={selectPeopleTagHandler}
-          />
-        </Popup>
+          currentLoggedInUser={currentLoggedInUser}
+          selectPeopleHandler={selectPeopleTagHandler}
+        />
       )}
     </>
   );

@@ -108,12 +108,6 @@
   margin: 1rem 0;
 }
 
-.addPeopleTagsWrapper > section > section {
-  overflow-x: hidden;
-  padding-top: 3rem !important;
-  height: 550px;
-}
-
 @media (max-width: 800px) {
   .wrapper {
     flex-direction: column;

@@ -9,11 +9,14 @@ import formatTime from "../../lib/formatTime";
 import getFollowsOfLikers from "../../lib/getFollowsOfLikers";
 import PopUp from "../PopUp";
 import ShowUserListItem from "../little/ShowUserListItem";
+import PeopleSelector from "../createPost/PeopleSelector"
 
 import useFetch, { fetchData } from "../../hooks/useFetch";
 
 export default function PostFooter(props) {
   const [toggleSave, setToggleSave] = useState(props.isSaved);
+
+  const [showPeopleSharePopup, setShowPeopleSharePopup] = useState(false);
 
   // find out if logged in user follows any of the other people liking the post
   const [likes, setLikes, likesLoading] = useFetch(
@@ -74,6 +77,12 @@ export default function PostFooter(props) {
     console.log(ok ? data : error);
   };
 
+  const selectPeopleShareHandler = (username) => {
+    // send message to server
+
+    // send message in realtime to receiving user
+  }
+
   return (
     <>
       <footer className={`${styles.footer} ${props.onTop ? styles.onTop : ""}`}>
@@ -89,7 +98,10 @@ export default function PostFooter(props) {
               <i className="fa-regular fa-comment"></i>
             </Link>
           )}
-          <i className="fa-regular fa-paper-plane"></i>
+          <i
+            onClick={() => setShowPeopleSharePopup(true)}
+            className="fa-regular fa-paper-plane"
+          ></i>
 
           <span onClick={() => setSaveHandler(!toggleSave)}>
             {toggleSave ? (
@@ -150,6 +162,15 @@ export default function PostFooter(props) {
             />
           ))}
         </PopUp>
+      )}
+
+      {showPeopleSharePopup && (
+        <PeopleSelector
+          title="Beitrag teilen"
+          close={() => setShowPeopleSharePopup(false)}
+          currentLoggedInUser={props.currentLoggedInUser}
+          selectPeopleHandler={selectPeopleShareHandler}
+        />
       )}
     </>
   );
