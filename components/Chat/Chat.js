@@ -3,15 +3,19 @@ import { useState, useEffect, Fragment, useRef } from "react";
 import ChatDayMessage from "./ChatDayMessage";
 import UserChatMessages from "./UserChatMessages";
 import WriteComment from "../Post/WriteComment";
+import AudioRecorder from "./AudioRecorder";
 import styles from "./chatStyles.module.css";
+
 import { fetchData } from "../../hooks/useFetch";
 import usePusher from "../../hooks/usePusher";
 
-export default ({ openChatIdx, data, currentLoggedInUser }) => {
+export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
   const chatMsgWrapperRef = useRef(null);
   const [chatsData, setChatsData] = useChatsData(data, openChatIdx);
   const [isTyping, setIsTyping] = useState(null);
-  
+
+  const [recording, setRecording] = useState(false);
+
   const [pusherChatsData, sendMessage, typingUser] = usePusher(
     chatsData,
     chatsData[openChatIdx].id,
@@ -27,6 +31,12 @@ export default ({ openChatIdx, data, currentLoggedInUser }) => {
       chatMsgWrapperRef.current.scrollHeight
     );
   useEffect(scrollBottom, [messageArrays]);
+
+  function submitAudioHandler(audioBlob) {
+    setRecording(false);
+    setIsTyping(false)
+    sendMessage(audioBlob, "audio");
+  }
 
   return (
     <section className={styles.wrapper}>
@@ -51,17 +61,36 @@ export default ({ openChatIdx, data, currentLoggedInUser }) => {
           />
         )}
       </section>
-      <footer>
-        <WriteComment
-          submitHandler={sendMessage}
-          buttonValue="Senden"
-          placeholder="Nachricht schreiben ..."
-          setTyping={setIsTyping}
+      {recording ? (
+        <AudioRecorder
+          stop={() => setRecording(false)}
+          submit={submitAudioHandler}
         />
-      </footer>
+      ) : (
+        <footer>
+          <WriteComment
+            submitHandler={(val) => sendMessage(val, "text")}
+            buttonValue="Senden"
+            placeholder="Nachricht schreiben ..."
+            setTyping={setIsTyping}
+            sendButtonAlternative={
+              <div className={styles.otherMessageTypesIconsWrapper}>
+                <i
+                  className="fa-solid fa-microphone"
+                  onClick={() => {
+                    setRecording(true);
+                    setIsTyping(true);
+                  }}
+                ></i>
+                <i className="fa-regular fa-image"></i>
+              </div>
+            }
+          />
+        </footer>
+      )}
     </section>
   );
-};
+}
 
 function structureMessages(chatsData, openChatIdx) {
   // group chat messages by the day of creation
@@ -124,5 +153,5 @@ function useChatsData(data, openChatIdx) {
     fetchMessages(chatsData[openChatIdx].id);
   }, [openChatIdx]);
 
-  return [chatsData, setChatsData]
+  return [chatsData, setChatsData];
 }

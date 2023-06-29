@@ -1,9 +1,9 @@
-import formidable from "formidable";
-import path from "path";
-import fs from "fs/promises";
+import getReqData from "../../../lib/getReqData";
+import saveFile from "../../../lib/saveFile";
 
 import executeQuery from "../../../database/executeQuery";
 import requireAuth from "../auth/requireAuth";
+
 export const config = {
   api: {
     bodyParser: false,
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   const username = await requireAuth(req, res);
   if (!username) return;
 
-  const formData = await readFile(req, true);
+  const formData = await getReqData(req);
   const data = JSON.parse(formData.fields.data);
   const files = formData.files;
 
@@ -43,40 +43,18 @@ export default async function handler(req, res) {
   // save photos
   for (let i = 0; i < data.imgData.length; i++) {
     const id = data.imgData[i].id;
-    saveFile(files[id], username, `${postId}_${id}.jpg`);
+    try {
+      await saveFile(files[id], "post_photos", username, `${postId}_${id}.jpg`);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ err: "An Error occurred while saving the file!" });
+    }
   }
   await insertPhotos(postId, data.imgData);
 
   res.status(200).json({ message: "Photos created!" });
-}
-
-function readFile(req) {
-  const form = formidable();
-  return new Promise((resolve, reject) => {
-    form.parse(req, (err, fields, files) => {
-      if (err) reject(err);
-      resolve({ fields, files });
-    });
-  });
-}
-
-async function saveFile(file, username, filename) {
-  // check if there is a directory for the user already
-  // (if the user has not posted anything yet, no folder is created)
-  const userDirectory = path.join(
-    process.cwd(),
-    "/assets/post_photos/" + username
-  );
-  try {
-    await fs.readdir(userDirectory);
-  } catch (err) {
-    console.log(err);
-    await fs.mkdir(userDirectory);
-  }
-
-  fs.rename(file.filepath, path.join(userDirectory, filename), (err) => {
-    if (err) throw err;
-  });
 }
 
 async function insertPost(

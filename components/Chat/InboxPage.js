@@ -6,7 +6,6 @@ import Button from "../little/Button";
 import Chat from "./Chat";
 
 import formatTime from "../../lib/formatTime";
-import { fetchData } from "../../hooks/useFetch";
 
 export default function InboxPage({ data, currentLoggedInUser }) {
   const [openChatIdx, setOpenChatIdx] = useState(0);
@@ -37,7 +36,7 @@ export default function InboxPage({ data, currentLoggedInUser }) {
             onClick={() => setOpenChatIdx(idx)}
           >
             <ChatProfileImage users={chat.group_members} />
-            <span>{getChatName(chat.group_members)}</span>
+            <span>{chatName}</span>
             <span>
               {chat.group_members.length > 1 ? `${chat.username}: ` : ""}
               {chat.value} • {formatTime(new Date(chat.created_at))}

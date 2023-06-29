@@ -132,3 +132,11 @@
   width: fit-content !important;
   scale: 1.1;
 }
+
+.onlineIndicator {
+  color: var(--green);
+  font-weight: bolder;
+  font-size: 2rem;
+  position: absolute;
+  translate: 25% -25%;
+}

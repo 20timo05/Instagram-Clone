@@ -1,5 +1,6 @@
 import ProfileImage from "../little/ProfileImage";
 import TextMessage from "./MessageTypes/TextMessage";
+import AudioMessage from "./MessageTypes/AudioMessage"
 import TypingAnimation from "./MessageTypes/TypingAnimation";
 import { fetchData } from "../../hooks/useFetch";
 
@@ -81,6 +82,16 @@ export default function UserChatMessages({
             <TextMessage
               key={message.id}
               value={message.value}
+              ownMessage={ownMessages}
+              currentLoggedInUser={currentLoggedInUser}
+              likes={message.likes}
+              onLike={() => likeHandler(message)}
+            />
+          ) : message.message_type === "audio" ? (
+            <AudioMessage
+              key={message.id}
+              id={message.id}
+              username={message.username}
               ownMessage={ownMessages}
               currentLoggedInUser={currentLoggedInUser}
               likes={message.likes}

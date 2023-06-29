@@ -51,7 +51,7 @@ export async function getData(userId, lazyLoadIteration = 0) {
     const photosQuery = `
       SELECT
         photos.id,
-        CONCAT("/api/image/post_photos/", username, "/", post_id, "_", position, ".jpg") AS image_url,
+        CONCAT("/api/getFiles/getPostPhoto", username, "/", post_id, "_", position, ".jpg") AS image_url,
         username,
         post_id,
         position,

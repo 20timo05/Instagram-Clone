@@ -6,6 +6,9 @@
 }
 
 .wrapper > footer {
+  height: 60px;
+  display: flex;
+  align-items: center;
   position: absolute;
   bottom: 1rem;
   width: calc(100% - 2rem);
@@ -19,6 +22,7 @@
 .wrapper > footer > footer {
   margin-top: 0 !important;
   border-top: none !important;
+  width: 100%;
 }
 
 .wrapper > section {
@@ -26,4 +30,14 @@
   flex-direction: column;
   height: calc(100% - 100px);
   overflow: auto;
+}
+
+.otherMessageTypesIconsWrapper {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.5rem;
+}
+
+.otherMessageTypesIconsWrapper > i {
+  cursor: pointer;
 }

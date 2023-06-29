@@ -182,7 +182,7 @@ CREATE TABLE
         id INTEGER AUTO_INCREMENT PRIMARY KEY,
         sender_user_id INTEGER NOT NULL,
         group_id INTEGER NOT NULL,
-        message_type ENUM("text", "image", "video", "post") NOT NULL,
+        message_type ENUM("text", "image", "video", "post", "audio") NOT NULL,
         value VARCHAR(1000) NOT NULL,
         created_at TIMESTAMP DEFAULT NOW(),
         FOREIGN KEY(sender_user_id) REFERENCES users(id) ON DELETE CASCADE,

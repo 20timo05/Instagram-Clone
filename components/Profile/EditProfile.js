@@ -65,7 +65,7 @@ export default function EditProfile({ close, currentLoggedInUser }) {
   const changeProfilePicture = async () => {
     //check if user already has profile image
     const hasAlready = await isValidImageSrc(
-      `/api/image/profile_images/${userData.username}.jpg`
+      `/api/getFiles/getProfileImage?username=${userData.username}`
     );
     if (hasAlready) setShowChangeProfileImagePopUp(true);
     else inputRef.current.click();

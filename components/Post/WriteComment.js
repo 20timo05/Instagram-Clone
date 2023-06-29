@@ -22,7 +22,7 @@ export default function WriteComment(props) {
     evt.target.style.height = `${evt.target.scrollHeight}px`;
     setSubmitDeactivated(evt.target.value.length === 0);
     setTextAreaValue(evt.target.value);
-    props.setTyping(evt.target.value.length > 0)
+    props.setTyping(evt.target.value.length > 0);
   };
 
   useEffect(() => {
@@ -105,14 +105,18 @@ export default function WriteComment(props) {
           onChange={textAreaChangeHandler}
           ref={textAreaRef}
         ></textarea>
-        <button
-          type="submit"
-          className={`${styles.post} ${
-            submitDeactivated ? styles.deactivated : ""
-          }`}
-        >
-          {props.buttonValue || "Posten"}
-        </button>
+        {!props.sendButtonAlternative || textAreaValue.length > 0 ? (
+          <button
+            type="submit"
+            className={`${styles.post} ${
+              submitDeactivated ? styles.deactivated : ""
+            }`}
+          >
+            {props.buttonValue || "Posten"}
+          </button>
+        ) : (
+          props.sendButtonAlternative
+        )}
       </form>
     </footer>
   );

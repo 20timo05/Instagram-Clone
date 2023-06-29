@@ -11,7 +11,7 @@ export default function ProfileImage(props) {
           src
             ? src
             : username
-            ? `/api/image/profile_images/${username}.jpg`
+            ? `/api/getFiles/getProfileImage?username=${username}`
             : "/default_profile_image.jpg"
         }
         alt="Profile Picture"

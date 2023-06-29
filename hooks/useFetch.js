@@ -50,7 +50,6 @@ export async function fetchData(
   callback = null,
   options = {}
 ) {
-  //console.log("method: " + method, "url: " + url, "body: " + JSON.stringify(body))
   let response;
   if (method === "GET") {
     if (body) {
@@ -75,8 +74,8 @@ export async function fetchData(
       if (callback) callback({ ok: true, data });
       return { ok: true, data };
     } else {
-      if (callback) callback({ ok: false, error: data });
-      return { ok: false, error: data };
+      if (callback) callback({ ok: false, data: response, error: data });
+      return { ok: false, data: response, error: data };
     }
   } catch (err) {
     return { ok: false, error: err };

@@ -5,7 +5,6 @@ import { fetchData } from "./useFetch";
 
 export default function Chat(chatsData, chatId, sender, isTyping) {
   const [chats, setChats] = useState(chatsData);
-
   const [otherChatUserTyping, setOtherChatUserTyping] = useState([]);
   const typingUser = otherChatUserTyping
     .filter((user) => user.chatId === chatId && user.username !== sender)
@@ -40,13 +39,18 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
     };
   }, [chatsData, sender]);
 
-  const sendMessage = async (value) => {
+  const sendMessage = async (value, message_type) => {
+    const formData = new FormData();
+    formData.append("chatId", chatId);
+    formData.append("value", value);
+    formData.append("message_type", message_type);
+
     // save message in database
-    await fetchData("POST", "/api/inbox/setMessage", {
-      chatId,
-      value,
-      message_type: "text",
+    const result = await fetch("/api/inbox/setMessage", {
+      method: "POST",
+      body: formData,
     });
+    const { id } = await result.json();
 
     // sending message stops typing
     await sendTypingNotification(false);
@@ -54,8 +58,8 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
     // send message in realtime to other online users
     await fetchData("POST", "/api/inbox/pusher", {
       type: "incoming-message",
-      message: value,
-      message_type: "text",
+      value: message_type === "text" ? value : id,
+      message_type,
       chatId,
       created_at: new Date().toISOString(),
     });
@@ -77,25 +81,29 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
 }
 
 function incomingMessage(data, setChats) {
-  const { sender, message, chatId, created_at } = data;
+  const { sender, value, chatId, message_type, created_at } = data;
   setChats((prevState) => {
     const newPrev = [...prevState];
     const chatIdx = newPrev.findIndex((chat) => chat.id === chatId);
     const tempChatMsgId =
       Math.max(...newPrev[chatIdx].chatMessages.map((msg) => msg.id)) + 1;
     const msg = {
-      id: tempChatMsgId,
-      message_type: "text",
+      message_type,
       username: sender,
-      value: message,
       created_at: created_at,
     };
+
+    if (message_type === "text") {
+      msg.id = tempChatMsgId;
+      msg.value = value;
+    } else if (message_type === "audio") {
+      msg.id = value;
+      msg.value = "audio/wav";
+    }
+
     if (
       !newPrev[chatIdx].chatMessages.find(
-        (msg) =>
-          msg.created_at === created_at &&
-          msg.username === sender &&
-          msg.value === message
+        (msg) => msg.created_at === created_at && msg.username === sender
       )
     ) {
       newPrev[chatIdx].chatMessages.push(msg);
