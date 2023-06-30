@@ -72,7 +72,10 @@ export default function Popup({
         }
 
         .content {
+          overflow-x: hidden;
+          overflow-y: auto;
           padding: 0 1rem;
+          position: relative;
         }
       `}</style>
       <ClientOnlyPortal selector="#usersModal">

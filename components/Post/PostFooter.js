@@ -9,7 +9,7 @@ import formatTime from "../../lib/formatTime";
 import getFollowsOfLikers from "../../lib/getFollowsOfLikers";
 import PopUp from "../PopUp";
 import ShowUserListItem from "../little/ShowUserListItem";
-import PeopleSelector from "../createPost/PeopleSelector"
+import PeopleSelector from "../createPost/PeopleSelector";
 
 import useFetch, { fetchData } from "../../hooks/useFetch";
 
@@ -77,11 +77,10 @@ export default function PostFooter(props) {
     console.log(ok ? data : error);
   };
 
-  const selectPeopleShareHandler = (username) => {
+  const selectPeopleShareHandler = (usernames) => {
     // send message to server
-
     // send message in realtime to receiving user
-  }
+  };
 
   return (
     <>
@@ -170,6 +169,7 @@ export default function PostFooter(props) {
           close={() => setShowPeopleSharePopup(false)}
           currentLoggedInUser={props.currentLoggedInUser}
           selectPeopleHandler={selectPeopleShareHandler}
+          multiple={true}
         />
       )}
     </>

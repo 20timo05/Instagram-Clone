@@ -11,7 +11,7 @@ import EnterLocation from "./EnterLocation";
 import Input from "../auth/Input/index";
 import Button from "../little/Button";
 import ToggleSwitch from "../little/ToggleSwitch";
-import PeopleSelector from "./PeopleSelector"
+import PeopleSelector from "./PeopleSelector";
 import PeopleTag from "../Post/PeopleTag";
 import CaptionTextArea from "../Profile/CaptionTextArea";
 
@@ -232,6 +232,7 @@ export default function SetCaption({
           close={() => setShowPeopleTagPopup(false)}
           currentLoggedInUser={currentLoggedInUser}
           selectPeopleHandler={selectPeopleTagHandler}
+          multiple={false}
         />
       )}
     </>

@@ -308,7 +308,7 @@ function useSearch(currentLoggedInUserId, searchVal, searchType) {
   return [loading, options, loadMore];
 }
 
-function UserSearchOption({ option, onDelete, onClick, focused }) {
+export function UserSearchOption({ option, onDelete, onClick, focused }) {
   return (
     <div
       className={`${styles.searchOptions} ${focused && styles.focused}`}
