@@ -58,7 +58,7 @@ export default async function handler(req, res) {
     const photosQuery = `
       SELECT
         photos.id,
-        CONCAT("/api/getFiles/getPostPhoto", username, "/", post_id, "_", position, ".jpg") AS image_url,
+        CONCAT("/api/getFiles/getPostPhoto/", username, "/", post_id, "_", position, ".jpg") AS image_url,
         username,
         post_id,
         position,
