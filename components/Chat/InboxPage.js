@@ -9,7 +9,7 @@ import formatTime from "../../lib/formatTime";
 
 export default function InboxPage({ data, currentLoggedInUser }) {
   const [openChatIdx, setOpenChatIdx] = useState(0);
-
+  
   const users = openChatIdx !== null && data[openChatIdx].group_members;
   const chatName = users && getChatName(users);
 

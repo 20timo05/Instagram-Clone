@@ -1,6 +1,7 @@
 import ProfileImage from "../little/ProfileImage";
 import TextMessage from "./MessageTypes/TextMessage";
-import AudioMessage from "./MessageTypes/AudioMessage"
+import AudioMessage from "./MessageTypes/AudioMessage";
+import PostMessage from "./MessageTypes/PostMessage"
 import TypingAnimation from "./MessageTypes/TypingAnimation";
 import { fetchData } from "../../hooks/useFetch";
 
@@ -10,7 +11,7 @@ export default function UserChatMessages({
   setChatsData,
 }) {
   const username = userMessages[0].username;
-  const ownMessages = username === currentLoggedInUser.username;
+  const ownMessage = username === currentLoggedInUser.username;
 
   const likeHandler = async (message) => {
     const { id, likes } = message;
@@ -75,40 +76,39 @@ export default function UserChatMessages({
           margin-right: calc(1rem + 30px);
         }
       `}</style>
-      <div className={`wrapper ${ownMessages ? "right" : ""}`}>
+      <div className={`wrapper ${ownMessage ? "right" : ""}`}>
         <span>{username}</span>
-        {userMessages.map((message) =>
-          message.message_type === "text" ? (
-            <TextMessage
-              key={message.id}
-              value={message.value}
-              ownMessage={ownMessages}
-              currentLoggedInUser={currentLoggedInUser}
-              likes={message.likes}
-              onLike={() => likeHandler(message)}
-            />
+        {userMessages.map((message) => {
+          const props = {
+            key: message.id,
+            ownMessage,
+            currentLoggedInUser,
+            likes: message.likes,
+            onLike: () => likeHandler(message),
+          };
+
+          return message.message_type === "text" ? (
+            <TextMessage value={message.value} {...props} />
           ) : message.message_type === "audio" ? (
             <AudioMessage
-              key={message.id}
               id={message.id}
               username={message.username}
-              ownMessage={ownMessages}
-              currentLoggedInUser={currentLoggedInUser}
-              likes={message.likes}
-              onLike={() => likeHandler(message)}
+              {...props}
             />
+          ) : message.message_type === "post" ? (
+            <PostMessage postId={message.post_id} {...props} />
           ) : (
             message.message_type === "typing" && (
               <TypingAnimation key={username} />
             )
-          )
-        )}
+          );
+        })}
         <ProfileImage
           username={username}
           height={30}
           width={30}
           style={{
-            translate: ownMessages ? "125% -100%" : "-125% -100%",
+            translate: ownMessage ? "125% -100%" : "-125% -100%",
           }}
         />
       </div>

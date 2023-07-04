@@ -37,7 +37,7 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
     setIsTyping(false)
     sendMessage(audioBlob, "audio");
   }
-
+  
   return (
     <section className={styles.wrapper}>
       <section ref={chatMsgWrapperRef}>

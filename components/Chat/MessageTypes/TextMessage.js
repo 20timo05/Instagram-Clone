@@ -10,7 +10,7 @@ export default function TextMessage({
   const clickHandler = (evt) => {
     if (evt.detail === 2) onLike();
   };
-
+  
   return (
     <>
       <style jsx>{`

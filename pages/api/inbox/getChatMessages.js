@@ -34,6 +34,7 @@ export async function getData(chatId, username) {
       username,
       message_type,
       value,
+      post_id,
       chat_messages.created_at
     FROM chat_messages
     INNER JOIN users

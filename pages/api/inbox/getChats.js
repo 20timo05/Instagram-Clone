@@ -85,7 +85,7 @@ export async function getData(userId, lazyLoadIteration = 0) {
         .map(({ username }) => username)
     );
   }
-
+  
   return [false, JSON.parse(JSON.stringify(result))];
 }
 

@@ -2,6 +2,15 @@ import requireAuth from "../auth/requireAuth";
 
 import { pusher, checkUserChat } from "./pusherAuth";
 
+export async function sendMessage(username, chatId, type, data) {
+  console.log(username, chatId, type, data)
+  const response = await pusher.trigger(`private-${chatId}`, type, {
+    ...data,
+    sender: username,
+    chatId
+  });
+}
+
 export default async function handler(req, res) {
   const { type, ...data } = req.body;
 
@@ -15,10 +24,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const response = await pusher.trigger(`private-${data.chatId}`, type, {
-    ...data,
-    sender: username,
-  });
+  await sendMessage(username, data.chatId, type, data)
 
   res.json({ message: "completed" });
 }

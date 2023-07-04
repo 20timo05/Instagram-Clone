@@ -173,8 +173,8 @@ CREATE TABLE chat_group_members (
     user_id INT NOT NULL,
     group_id INT NOT NULL,
     PRIMARY KEY(user_id, group_id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (group_id) REFERENCES chat_groups(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES chat_groups(id) ON DELETE CASCADE
 );
 
 CREATE TABLE
@@ -183,10 +183,12 @@ CREATE TABLE
         sender_user_id INTEGER NOT NULL,
         group_id INTEGER NOT NULL,
         message_type ENUM("text", "image", "video", "post", "audio") NOT NULL,
-        value VARCHAR(1000) NOT NULL,
+        value VARCHAR(1000),
+        post_id INTEGER,
         created_at TIMESTAMP DEFAULT NOW(),
-        FOREIGN KEY(sender_user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY(group_id) REFERENCES chat_groups(id) ON DELETE CASCADE
+        FOREIGN KEY(sender_user_id) REFERENCES users(id),
+        FOREIGN KEY(group_id) REFERENCES chat_groups(id) ON DELETE CASCADE,
+        FOREIGN KEY(post_id) REFERENCES posts(id)
     );
 
 CREATE TABLE

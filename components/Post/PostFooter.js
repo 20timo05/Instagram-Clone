@@ -77,9 +77,11 @@ export default function PostFooter(props) {
     console.log(ok ? data : error);
   };
 
-  const selectPeopleShareHandler = (usernames) => {
-    // send message to server
-    // send message in realtime to receiving user
+  const selectPeopleShareHandler = async (usernames) => {
+    await fetchData("POST", "/api/inbox/sendPost", {
+      id: props.post_id,
+      receiving_user_ids: usernames.map(({ id }) => id),
+    });
   };
 
   return (

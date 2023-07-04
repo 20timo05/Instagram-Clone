@@ -81,7 +81,7 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
 }
 
 function incomingMessage(data, setChats) {
-  const { sender, value, chatId, message_type, created_at } = data;
+  const { sender, value, post_id, chatId, message_type, created_at } = data;
   setChats((prevState) => {
     const newPrev = [...prevState];
     const chatIdx = newPrev.findIndex((chat) => chat.id === chatId);
@@ -99,6 +99,9 @@ function incomingMessage(data, setChats) {
     } else if (message_type === "audio") {
       msg.id = value;
       msg.value = "audio/wav";
+    } else if (message_type === "post") {
+      msg.id = tempChatMsgId
+      msg.post_id = post_id
     }
 
     if (
