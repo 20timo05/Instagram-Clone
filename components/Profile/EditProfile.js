@@ -94,7 +94,7 @@ export default function EditProfile({ close, currentLoggedInUser }) {
     <>
       <input
         type="file"
-        accept="image/jpeg"
+        accept="image/jpeg, image.png"
         style={{ display: "none" }}
         ref={inputRef}
         multiple={false}

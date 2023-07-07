@@ -1,4 +1,5 @@
 import { useState, useEffect, Fragment, useRef } from "react";
+import Image from "next/image";
 
 import ChatDayMessage from "./ChatDayMessage";
 import UserChatMessages from "./UserChatMessages";
@@ -25,6 +26,9 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
 
   const messageArrays = structureMessages(pusherChatsData, openChatIdx);
 
+  const inputRef = useRef(null);
+  const [files, setFiles] = useState([]);
+
   const scrollBottom = () =>
     chatMsgWrapperRef.current.scrollTo(
       0,
@@ -34,10 +38,29 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
 
   function submitAudioHandler(audioBlob) {
     setRecording(false);
-    setIsTyping(false)
+    setIsTyping(false);
     sendMessage(audioBlob, "audio");
   }
-  
+
+  async function uploadImageHandler(evt) {
+    const { files } = evt.target;
+
+    const filesWithSrc = [];
+    for (let file of files)
+      filesWithSrc.push([URL.createObjectURL(file), file]);
+
+    setFiles((prev) => [
+      ...prev,
+      // filter to prevent duplicates
+      ...filesWithSrc.filter(
+        ([src, { name }]) =>
+          !prev.find(([src, { name: prevName }]) => prevName === name)
+      ),
+    ]);
+  }
+  function removeFileHandler(src) {
+    setFiles((prev) => prev.filter(([prevSrc]) => prevSrc !== src));
+  }
   return (
     <section className={styles.wrapper}>
       <section ref={chatMsgWrapperRef}>
@@ -68,11 +91,40 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
         />
       ) : (
         <footer>
+          {files.length > 0 && (
+            <div className={styles.filesPreview}>
+              {files.map(([src, file]) => (
+                <div key={src}>
+                  <div onClick={() => removeFileHandler(src)}>✖</div>
+                  {file.type === "video/mp4" ? (
+                    <video src={src}></video>
+                  ) : (
+                    <Image src={src} fill alt="Image Preview" />
+                  )}
+                </div>
+              ))}
+              <div
+                onClick={() => inputRef?.current?.click()}
+                title="Ein weiteres Foto/ Video hochladen"
+              >
+                <i className="fa-regular fa-images"></i>
+              </div>
+            </div>
+          )}
+          <input
+            type="file"
+            accept="image/jpeg, image/png, video/mp4"
+            style={{ display: "none" }}
+            ref={inputRef}
+            multiple={true}
+            onChange={uploadImageHandler}
+          />
           <WriteComment
             submitHandler={(val) => sendMessage(val, "text")}
             buttonValue="Senden"
             placeholder="Nachricht schreiben ..."
             setTyping={setIsTyping}
+            hideButtonAlternative={files.length > 0}
             sendButtonAlternative={
               <div className={styles.otherMessageTypesIconsWrapper}>
                 <i
@@ -82,7 +134,10 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
                     setIsTyping(true);
                   }}
                 ></i>
-                <i className="fa-regular fa-image"></i>
+                <i
+                  className="fa-regular fa-image"
+                  onClick={() => inputRef?.current?.click()}
+                ></i>
               </div>
             }
           />

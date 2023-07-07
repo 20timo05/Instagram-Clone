@@ -105,7 +105,9 @@ export default function WriteComment(props) {
           onChange={textAreaChangeHandler}
           ref={textAreaRef}
         ></textarea>
-        {!props.sendButtonAlternative || textAreaValue.length > 0 ? (
+        {!props.sendButtonAlternative ||
+        textAreaValue.length > 0 ||
+        props.hideButtonAlternative ? (
           <button
             type="submit"
             className={`${styles.post} ${
