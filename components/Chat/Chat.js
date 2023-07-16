@@ -39,7 +39,7 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
   function submitAudioHandler(audioBlob) {
     setRecording(false);
     setIsTyping(false);
-    sendMessage(audioBlob, "audio");
+    sendMessage(audioBlob, "file");
   }
 
   async function uploadImageHandler(evt) {
@@ -61,6 +61,15 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
   function removeFileHandler(src) {
     setFiles((prev) => prev.filter(([prevSrc]) => prevSrc !== src));
   }
+
+  function submitHandler(val) {
+    for (let [blob, file] of files) {
+      sendMessage(file, "file");
+    }
+    if (val.length > 0) sendMessage(val, "text");
+    setFiles([]);
+  }
+
   return (
     <section className={styles.wrapper}>
       <section ref={chatMsgWrapperRef}>
@@ -120,7 +129,7 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
             onChange={uploadImageHandler}
           />
           <WriteComment
-            submitHandler={(val) => sendMessage(val, "text")}
+            submitHandler={submitHandler}
             buttonValue="Senden"
             placeholder="Nachricht schreiben ..."
             setTyping={setIsTyping}

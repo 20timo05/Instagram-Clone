@@ -111,7 +111,7 @@ export default function WriteComment(props) {
           <button
             type="submit"
             className={`${styles.post} ${
-              submitDeactivated ? styles.deactivated : ""
+              submitDeactivated && !props.hideButtonAlternative ? styles.deactivated : ""
             }`}
           >
             {props.buttonValue || "Posten"}

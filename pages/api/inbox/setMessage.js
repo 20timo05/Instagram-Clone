@@ -36,11 +36,17 @@ export default async function handler(req, res) {
     message_type === "text" ? value : value.mimetype
   );
   if (insertError) return res.status(insertData.code).json(insertData.err);
-
-  if (message_type === "audio") {
+  
+  if (message_type === "file") {
     // save file with the name set to the id of the corresponding entry in the database
+    const fileEnding = value.mimetype.substring(value.mimetype.indexOf("/") + 1)
     try {
-      await saveFile(value, "chat_message_files", username, `${insertData}.wav`);
+      await saveFile(
+        value,
+        "chat_message_files",
+        username,
+        `${insertData}.${fileEnding}`
+      );
     } catch (err) {
       console.log(err);
       return res
@@ -96,6 +102,8 @@ async function createChatMessage(username, chatId, message_type, value) {
     query: insertQuery,
     values: [username, chatId, message_type, value],
   });
+
+  console.log(insertResult, message_type)
 
   if (insertResult.error) {
     console.log(insertResult.error);

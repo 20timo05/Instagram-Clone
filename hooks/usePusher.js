@@ -44,7 +44,7 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
     formData.append("chatId", chatId);
     formData.append("value", value);
     formData.append("message_type", message_type);
-
+    
     // save message in database
     const result = await fetch("/api/inbox/setMessage", {
       method: "POST",
@@ -59,6 +59,7 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
     await fetchData("POST", "/api/inbox/pusher", {
       type: "incoming-message",
       value: message_type === "text" ? value : id,
+      filetype: message_type === "text" ? null : value.type,
       message_type,
       chatId,
       created_at: new Date().toISOString(),
@@ -81,7 +82,7 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
 }
 
 function incomingMessage(data, setChats) {
-  const { sender, value, post_id, chatId, message_type, created_at } = data;
+  const { sender, value, post_id, chatId, message_type, filetype, created_at } = data;
   setChats((prevState) => {
     const newPrev = [...prevState];
     const chatIdx = newPrev.findIndex((chat) => chat.id === chatId);
@@ -96,9 +97,9 @@ function incomingMessage(data, setChats) {
     if (message_type === "text") {
       msg.id = tempChatMsgId;
       msg.value = value;
-    } else if (message_type === "audio") {
+    } else if (message_type === "file") {
       msg.id = value;
-      msg.value = "audio/wav";
+      msg.value = filetype;
     } else if (message_type === "post") {
       msg.id = tempChatMsgId
       msg.post_id = post_id

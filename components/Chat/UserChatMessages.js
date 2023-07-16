@@ -1,7 +1,8 @@
 import ProfileImage from "../little/ProfileImage";
 import TextMessage from "./MessageTypes/TextMessage";
 import AudioMessage from "./MessageTypes/AudioMessage";
-import PostMessage from "./MessageTypes/PostMessage"
+import PostMessage from "./MessageTypes/PostMessage";
+import ImageOrVideoMessage from "./MessageTypes/ImageOrVideoMessage"
 import TypingAnimation from "./MessageTypes/TypingAnimation";
 import { fetchData } from "../../hooks/useFetch";
 
@@ -86,21 +87,30 @@ export default function UserChatMessages({
             likes: message.likes,
             onLike: () => likeHandler(message),
           };
+          const fileType =
+            message.message_type === "file"
+              ? message.value.substring(0, message.value.indexOf("/"))
+              : message.message_type;
 
-          return message.message_type === "text" ? (
+          return fileType === "text" ? (
             <TextMessage value={message.value} {...props} />
-          ) : message.message_type === "audio" ? (
+          ) : fileType === "audio" ? (
             <AudioMessage
               id={message.id}
               username={message.username}
               {...props}
             />
-          ) : message.message_type === "post" ? (
+          ) : fileType === "post" ? (
             <PostMessage postId={message.post_id} {...props} />
+          ) : fileType === "image" || fileType === "video" ? (
+            <ImageOrVideoMessage
+              id={message.id}
+              username={message.username}
+              type={message.value}
+              {...props}
+            />
           ) : (
-            message.message_type === "typing" && (
-              <TypingAnimation key={username} />
-            )
+            fileType === "typing" && <TypingAnimation key={username} />
           );
         })}
         <ProfileImage

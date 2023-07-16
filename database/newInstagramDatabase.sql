@@ -182,7 +182,7 @@ CREATE TABLE
         id INTEGER AUTO_INCREMENT PRIMARY KEY,
         sender_user_id INTEGER NOT NULL,
         group_id INTEGER NOT NULL,
-        message_type ENUM("text", "image", "video", "post", "audio") NOT NULL,
+        message_type ENUM("text", "post", "file") NOT NULL,
         value VARCHAR(1000),
         post_id INTEGER,
         created_at TIMESTAMP DEFAULT NOW(),
