@@ -12,14 +12,22 @@ export default async function imageHandler(req, res) {
       `${username}.jpg`
     );
     const fileContent = await fs.readFile(filePath);
-    res.status(200).send(fileContent);
+    res.writeHead(200, {
+      "Content-Type": "image/jpg",
+      "Content-Disposition": `attachment; filename=${username}.jpg`
+    })
+    res.end(fileContent);
   } catch (err) {
     const defaultProfileFilePath = path.join(
       process.cwd(),
       "public/default_profile_image.jpg"
     );
     const defaultProfileImage = await fs.readFile(defaultProfileFilePath);
-    res.status(200).send(defaultProfileImage);
+    res.writeHead(200, {
+      "Content-Type": "image/jpg",
+      "Content-Disposition": `inline; filename=default_profile_image.jpg`
+    })
+    res.end(defaultProfileImage);
   }
 }
 

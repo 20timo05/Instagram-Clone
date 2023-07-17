@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { signOut } from "next-auth/react";
-import Image from "next/image";
 
 import { link as linkStyles } from "../Post/postHeader.module.css";
 import styles from "./editProfile.module.css";
@@ -202,7 +201,7 @@ export default function EditProfile({ close, currentLoggedInUser }) {
               </div>
               <h3>Steckbrief</h3>
               <CaptionTextArea
-                caption={userData?.description}
+                caption={userData?.description || ""}
                 setCaption={(description) =>
                   setUserData((prev) => ({ ...prev, description }))
                 }
@@ -282,12 +281,15 @@ export default function EditProfile({ close, currentLoggedInUser }) {
 
 export async function isValidImageSrc(url) {
   try {
-    const img = new Image();
     await new Promise((resolve, reject) => {
-      img.src = url;
+      fetch(`/api/getFiles/getProfileImage?username=trollfi`).then((res) => {
+        const isDefaultProfileImage = res.headers
+          .get("content-disposition")
+          .includes("default_profile_image");
 
-      img.onload = () => resolve();
-      img.onerror = () => reject();
+        if (isDefaultProfileImage) reject();
+        else resolve();
+      });
     });
     return true;
   } catch (err) {
