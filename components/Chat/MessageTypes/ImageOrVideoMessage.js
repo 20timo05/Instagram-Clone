@@ -87,6 +87,7 @@ export default function ImageOrVideoMessage(props) {
             alt={props.type}
             src={src}
             fill
+            sizes={"236px"}
             style={{ zIndex: "5", background: "var(--darkWhite)" }}
           />
         ) : (
@@ -104,6 +105,7 @@ export default function ImageOrVideoMessage(props) {
               alt={props.type}
               src={src}
               fill={true}
+              sizes={"90vw"}
               style={{ objectFit: "contain" }}
             />
           ) : (

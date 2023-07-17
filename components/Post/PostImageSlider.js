@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import NextImage from "next/image";
+import Image from "next/image";
 
 import PeopleTag from "./PeopleTag";
 
@@ -100,10 +100,11 @@ export default function PostImageSlider(props) {
             className={styles.photoWrapper}
             style={{ left: `${(idx - currentPhotoIdx) * 650}px` }}
           >
-            <NextImage
+            <Image
               src={photo.image_url}
               alt={photo.alternativeText || "Post photo"}
               fill
+              sizes={"(min-width: 650px) 650px, 100vw"}
               style={{ objectFit: photo.scale ? "contain" : "cover", ...style }}
               {...imgProps}
             />

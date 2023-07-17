@@ -92,6 +92,7 @@ export default function PostMessage(props) {
                 src={data.image_url}
                 alt={data.alternativeText}
                 fill
+                sizes="(min-width: 800px) 300px"
                 style={{ objectFit: "cover" }}
               />
               {data.photo_count > 1 && (
