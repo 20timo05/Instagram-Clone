@@ -20,10 +20,10 @@ export default function TextMessage({
           min-width: 3rem;
           text-align: center;
           max-width: 75%;
-          padding: 1rem;
+          padding: min(1rem, 2vw);
           border: 1px solid var(--lightGrey);
           border-radius: 100px;
-          font-size: 0.9rem;
+          font-size: min(0.9rem, 3vw);
         }
 
         div.right {

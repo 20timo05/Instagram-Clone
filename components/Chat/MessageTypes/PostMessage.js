@@ -30,11 +30,15 @@ export default function PostMessage(props) {
 
         header {
           display: flex;
-          gap: 1rem;
+          gap: min(1rem, 0.75vw);
           align-items: center;
           font-weight: bolder;
           padding: 0 0.5rem 0.5rem;
           cursor: pointer;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: min(1rem, 2.5vw);
         }
 
         section {
@@ -70,7 +74,15 @@ export default function PostMessage(props) {
         <div className={props.ownMessage && "right"}>
           <Link href={`/${data.username}`}>
             <header>
-              <ProfileImage username={data.username} height={40} width={40} />
+              <ProfileImage
+                username={data.username}
+                height={40}
+                width={40}
+                style={{
+                  transform: `scale(${props.scale || 1})`,
+                  transformOrigin: "left center",
+                }}
+              />
               {data.username}
             </header>
           </Link>

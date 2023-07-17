@@ -2,9 +2,11 @@ import ProfileImage from "../little/ProfileImage";
 import TextMessage from "./MessageTypes/TextMessage";
 import AudioMessage from "./MessageTypes/AudioMessage";
 import PostMessage from "./MessageTypes/PostMessage";
-import ImageOrVideoMessage from "./MessageTypes/ImageOrVideoMessage"
+import ImageOrVideoMessage from "./MessageTypes/ImageOrVideoMessage";
 import TypingAnimation from "./MessageTypes/TypingAnimation";
 import { fetchData } from "../../hooks/useFetch";
+
+import useWindowSize from "../../hooks/useWindowSize";
 
 export default function UserChatMessages({
   userMessages,
@@ -57,6 +59,15 @@ export default function UserChatMessages({
     });
   };
 
+  // responsive
+  const { width } = useWindowSize();
+  // audio scale factor
+  const chatWidth = (width * 2) / 3;
+
+  const audioMsgScale = Math.min(1, (chatWidth * 0.5) / 230); // 230 * x = chatWidth * 0.8
+  const imgOrVideoMsgScale = Math.min(1, (chatWidth * 0.5) / 236);
+  const postHeaderScale = Math.min(1, (chatWidth * 0.5) / 190);
+
   return (
     <>
       <style jsx>{`
@@ -98,15 +109,21 @@ export default function UserChatMessages({
             <AudioMessage
               id={message.id}
               username={message.username}
+              scale={audioMsgScale}
               {...props}
             />
           ) : fileType === "post" ? (
-            <PostMessage postId={message.post_id} {...props} />
+            <PostMessage
+              postId={message.post_id}
+              scale={postHeaderScale}
+              {...props}
+            />
           ) : fileType === "image" || fileType === "video" ? (
             <ImageOrVideoMessage
               id={message.id}
               username={message.username}
               type={message.value}
+              scale={imgOrVideoMsgScale}
               {...props}
             />
           ) : (

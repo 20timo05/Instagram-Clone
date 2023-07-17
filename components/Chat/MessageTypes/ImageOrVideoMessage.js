@@ -16,7 +16,7 @@ export default function ImageOrVideoMessage(props) {
     <>
       <style jsx>{`
         .wrapper {
-          width: 263px;
+          width: calc(236px * ${props.scale || 1});
           aspect-ratio: 1.3;
           position: relative;
           border-radius: 20px;

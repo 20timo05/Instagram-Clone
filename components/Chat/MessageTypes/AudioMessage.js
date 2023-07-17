@@ -151,6 +151,9 @@ export default function AudioMessage(props) {
           display: flex;
           gap: 1rem;
           align-items: center;
+          scale: ${props.scale || 1};
+          transform-origin: right center;
+          margin: calc(-63.3px * (1 - ${props.scale || 1}) / 2) 0;
         }
 
         .wrapper.ownMessage {
