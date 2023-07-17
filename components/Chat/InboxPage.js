@@ -8,10 +8,10 @@ import Chat from "./Chat";
 import formatTime from "../../lib/formatTime";
 
 export default function InboxPage({ data, currentLoggedInUser }) {
-  const [openChatIdx, setOpenChatIdx] = useState(0);
+  const [openChatIdx, setOpenChatIdx] = useState(null);
   
-  const users = openChatIdx !== null && data[openChatIdx].group_members;
-  const chatName = users && getChatName(users);
+  const openedChatUsers = openChatIdx !== null && data[openChatIdx].group_members;
+  const openedChatName = openedChatUsers && getChatName(openedChatUsers);
 
   return (
     <div className={styles.wrapper}>
@@ -22,8 +22,8 @@ export default function InboxPage({ data, currentLoggedInUser }) {
       <header>
         {openChatIdx !== null && (
           <>
-            <ChatProfileImage users={users} />
-            <span>{chatName}</span>
+            <ChatProfileImage users={openedChatUsers} />
+            <span>{openedChatName}</span>
             <i className="fa-solid fa-video"></i>
           </>
         )}
@@ -36,7 +36,7 @@ export default function InboxPage({ data, currentLoggedInUser }) {
             onClick={() => setOpenChatIdx(idx)}
           >
             <ChatProfileImage users={chat.group_members} />
-            <span>{chatName}</span>
+            <span>{getChatName(chat.group_members)}</span>
             <span>
               {chat.group_members.length > 1 ? `${chat.username}: ` : ""}
               {chat.value} • {formatTime(new Date(chat.created_at))}
