@@ -74,6 +74,7 @@ export default function AudioRecorder({ stop, submit }) {
           animation: slideIn 0.2s forwards ease-in-out;
           transform-origin: 0 50%;
           display: flex;
+          flex-direction: row;
           gap: 1rem;
           color: white;
         }
@@ -92,6 +93,7 @@ export default function AudioRecorder({ stop, submit }) {
 
         .wrapper > canvas {
           height: 100%;
+          max-height: 60px;
           width: 100%;
         }
 
