@@ -18,6 +18,7 @@ export default function WriteComment(props) {
   );
 
   const textAreaChangeHandler = (evt) => {
+    console.log("HELLLLOOOOOOO")
     evt.target.style.height = "1px";
     evt.target.style.height = `${evt.target.scrollHeight}px`;
     setSubmitDeactivated(evt.target.value.length === 0);

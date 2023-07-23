@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function ProfileImage(props) {
   const { username, src, style, ...otherProps } = props;
-
+  
   return (
     <>
       <Image

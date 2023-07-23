@@ -3,7 +3,6 @@ import requireAuth from "../auth/requireAuth";
 import { pusher, checkUserChat } from "./pusherAuth";
 
 export async function sendMessage(username, chatId, type, data) {
-  console.log(username, chatId, type, data)
   const response = await pusher.trigger(`private-${chatId}`, type, {
     ...data,
     sender: username,

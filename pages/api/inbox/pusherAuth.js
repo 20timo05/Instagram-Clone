@@ -32,7 +32,7 @@ export default async function handler(req, res) {
   const channel = req.body.channel_name;
 
   const username = await requireAuth(req, res);
-
+  
   // check if user is allowed to join this chat
   const chatId = channel.substring("private-".length);
   const isMember = await checkUserChat(username, chatId);

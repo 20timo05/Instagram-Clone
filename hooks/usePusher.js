@@ -3,48 +3,51 @@ import Pusher from "pusher-js";
 
 import { fetchData } from "./useFetch";
 
-export default function Chat(chatsData, chatId, sender, isTyping) {
+export default function usePusher(
+  chatsData,
+  currentChatId,
+  sender,
+  isTyping,
+  incomingMsgHandler = null
+) {
   const [chats, setChats] = useState(chatsData);
   const [otherChatUserTyping, setOtherChatUserTyping] = useState([]);
   const typingUser = otherChatUserTyping
-    .filter((user) => user.chatId === chatId && user.username !== sender)
+    .filter((user) => user.chatId === currentChatId && user.username !== sender)
     .slice(-1)[0]?.username;
 
   useEffect(() => {
+    if (chatsData === null) return;
+
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
       cluster: "eu",
       channelAuthorization: { endpoint: "/api/inbox/pusherAuth" },
     });
 
-    const channel = pusher.subscribe(`private-${chatId}`);
+    chatsData.map(({ id }) => {
+      const channel = pusher.subscribe(`private-${id}`);
 
-    channel.bind("incoming-message", (data) => incomingMessage(data, setChats));
-
-    channel.bind("typing-notification", (data) => {
-      const { sender, chatId, isTyping } = data;
-      if (!isTyping) {
-        return setOtherChatUserTyping((prev) =>
-          prev.filter(({ username }) => username !== sender)
-        );
-      }
-
-      setOtherChatUserTyping((prev) => [
-        ...prev.filter(({ username }) => username !== sender),
-        { username: sender, chatId },
-      ]);
+      channel.bind("incoming-message", (data) =>
+        incomingMsgHandler
+          ? incomingMsgHandler(data)
+          : incomingMessage(data, setChats)
+      );
+      channel.bind("typing-notification", incomingTypingNotificationHandler);
     });
 
     return () => {
-      pusher.unsubscribe("chat");
+      pusher
+        .allChannels()
+        .forEach(({ channel }) => pusher.unsubscribe(channel));
     };
   }, [chatsData, sender]);
 
-  const sendMessage = async (value, message_type) => {
+  async function sendMessage(value, message_type, chatId = currentChatId) {
     const formData = new FormData();
     formData.append("chatId", chatId);
     formData.append("value", value);
     formData.append("message_type", message_type);
-    
+
     // save message in database
     const result = await fetch("/api/inbox/setMessage", {
       method: "POST",
@@ -53,7 +56,7 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
     const { id } = await result.json();
 
     // sending message stops typing
-    await sendTypingNotification(false);
+    await sendTypingNotification(false, chatId);
 
     // send message in realtime to other online users
     await fetchData("POST", "/api/inbox/pusher", {
@@ -64,10 +67,24 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
       chatId,
       created_at: new Date().toISOString(),
     });
-  };
+  }
+
+  function incomingTypingNotificationHandler(data) {
+    const { sender, chatId, isTyping } = data;
+    if (!isTyping) {
+      return setOtherChatUserTyping((prev) =>
+        prev.filter(({ username }) => username !== sender)
+      );
+    }
+
+    setOtherChatUserTyping((prev) => [
+      ...prev.filter(({ username }) => username !== sender),
+      { username: sender, chatId },
+    ]);
+  }
 
   // send notification to other users if current logged in user starts typing
-  async function sendTypingNotification(isTyping) {
+  async function sendTypingNotification(isTyping, chatId = currentChatId) {
     await fetchData("POST", "/api/inbox/pusher", {
       type: "typing-notification",
       chatId,
@@ -82,7 +99,8 @@ export default function Chat(chatsData, chatId, sender, isTyping) {
 }
 
 function incomingMessage(data, setChats) {
-  const { sender, value, post_id, chatId, message_type, filetype, created_at } = data;
+  const { sender, value, post_id, chatId, message_type, filetype, created_at } =
+    data;
   setChats((prevState) => {
     const newPrev = [...prevState];
     const chatIdx = newPrev.findIndex((chat) => chat.id === chatId);
@@ -101,8 +119,8 @@ function incomingMessage(data, setChats) {
       msg.id = value;
       msg.value = filetype;
     } else if (message_type === "post") {
-      msg.id = tempChatMsgId
-      msg.post_id = post_id
+      msg.id = tempChatMsgId;
+      msg.post_id = post_id;
     }
 
     if (

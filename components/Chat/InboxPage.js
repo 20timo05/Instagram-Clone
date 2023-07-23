@@ -7,20 +7,22 @@ import Chat from "./Chat";
 
 import formatTime from "../../lib/formatTime";
 
-export default function InboxPage({ data, currentLoggedInUser }) {
-  const [openChatIdx, setOpenChatIdx] = useState(null);
-  
-  const openedChatUsers = openChatIdx !== null && data[openChatIdx].group_members;
+export default function InboxPage(props) {
+  const [openChatId, setOpenChatId] = useState(props.openChatId);
+
+  const openedChatUsers =
+    openChatId !== null &&
+    props.data.find(({ id }) => id === openChatId).group_members;
   const openedChatName = openedChatUsers && getChatName(openedChatUsers);
 
   return (
     <div className={styles.wrapper}>
       <div>
-        <span>{currentLoggedInUser.username}</span>
+        <span>{props.currentLoggedInUser.username}</span>
         <i className="fa-regular fa-pen-to-square"></i>
       </div>
       <header>
-        {openChatIdx !== null && (
+        {openChatId !== null && (
           <>
             <ChatProfileImage users={openedChatUsers} />
             <span>{openedChatName}</span>
@@ -29,11 +31,11 @@ export default function InboxPage({ data, currentLoggedInUser }) {
         )}
       </header>
       <aside>
-        {data.map((chat, idx) => (
+        {props.data.map((chat, idx) => (
           <div
             key={chat.id}
-            className={styles.chat}
-            onClick={() => setOpenChatIdx(idx)}
+            className={`${styles.chat} ${chat.id === openChatId && styles.active}`}
+            onClick={() => setOpenChatId(chat.id)}
           >
             <ChatProfileImage users={chat.group_members} />
             <span>{getChatName(chat.group_members)}</span>
@@ -44,11 +46,11 @@ export default function InboxPage({ data, currentLoggedInUser }) {
           </div>
         ))}
       </aside>
-      {openChatIdx !== null ? (
+      {openChatId !== null ? (
         <Chat
-          openChatIdx={openChatIdx}
-          data={data}
-          currentLoggedInUser={currentLoggedInUser}
+          openChatId={openChatId}
+          data={props.data}
+          currentLoggedInUser={props.currentLoggedInUser}
         />
       ) : (
         <section>

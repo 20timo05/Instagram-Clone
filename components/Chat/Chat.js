@@ -10,21 +10,21 @@ import styles from "./chatStyles.module.css";
 import { fetchData } from "../../hooks/useFetch";
 import usePusher from "../../hooks/usePusher";
 
-export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
+export default function Chat({ openChatId, data, currentLoggedInUser }) {
   const chatMsgWrapperRef = useRef(null);
-  const [chatsData, setChatsData] = useChatsData(data, openChatIdx);
+  const [chatsData, setChatsData] = useChatsData(data, openChatId);
   const [isTyping, setIsTyping] = useState(null);
 
   const [recording, setRecording] = useState(false);
 
   const [pusherChatsData, sendMessage, typingUser] = usePusher(
     chatsData,
-    chatsData[openChatIdx].id,
+    openChatId,
     currentLoggedInUser.username,
     isTyping
   );
 
-  const messageArrays = structureMessages(pusherChatsData, openChatIdx);
+  const messageArrays = structureMessages(pusherChatsData, openChatId);
 
   const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
@@ -156,12 +156,14 @@ export default function Chat({ openChatIdx, data, currentLoggedInUser }) {
   );
 }
 
-function structureMessages(chatsData, openChatIdx) {
+function structureMessages(chatsData, openChatId) {
   // group chat messages by the day of creation
   let messageArrays = [];
-  if (chatsData[openChatIdx].chatMessages) {
+
+  const { chatMessages } = chatsData.find(({ id }) => id === openChatId)
+  if (chatMessages) {
     const messageGroups = {};
-    for (const message of chatsData[openChatIdx].chatMessages) {
+    for (const message of chatMessages) {
       const dateKey = message.created_at.substring(0, 10);
       if (!messageGroups[dateKey]) messageGroups[dateKey] = [];
       messageGroups[dateKey].push(message);
@@ -192,7 +194,7 @@ function structureMessages(chatsData, openChatIdx) {
   return messageArrays;
 }
 
-function useChatsData(data, openChatIdx) {
+function useChatsData(data, openChatId) {
   const [chatsData, setChatsData] = useState(data);
 
   async function fetchMessages(id) {
@@ -205,17 +207,17 @@ function useChatsData(data, openChatIdx) {
 
     setChatsData((prev) => {
       const newPrev = [...prev];
-      newPrev[openChatIdx].chatMessages = data;
+      newPrev.find(({ id }) => id === openChatId).chatMessages = data;
       return newPrev;
     });
   }
 
   useEffect(() => {
-    if (chatsData[openChatIdx].chatMessages) return;
+    if (chatsData.find(({ id }) => id === openChatId).chatMessages) return;
 
     // fetch chat Messages
-    fetchMessages(chatsData[openChatIdx].id);
-  }, [openChatIdx]);
+    fetchMessages(openChatId);
+  }, [openChatId]);
 
   return [chatsData, setChatsData];
 }

@@ -68,7 +68,8 @@
   user-select: none;
 }
 
-.chat:hover {
+.chat:hover,
+.chat.active {
   background: var(--lighterGrey);
 }
 
