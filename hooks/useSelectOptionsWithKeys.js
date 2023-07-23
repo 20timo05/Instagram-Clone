@@ -1,41 +1,46 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 
-export default function useSelectOptionsWithKeys(optionsLength, submit, startIdx = -1) {
-  const [currentOption, setCurrentOption] = useState(startIdx)
-  
+export default function useSelectOptionsWithKeys(
+  optionsLength,
+  submit,
+  startIdx = -1,
+  isActive = true
+) {
+  const [currentOption, setCurrentOption] = useState(startIdx);
   const keydownEventHandler = (evt) => {
-    const { key } = evt
-    
+    if (!isActive) return;
+    const { key } = evt;
+
     if (key === "ArrowDown") {
-      setCurrentOption(prev => {
-        evt.preventDefault()
-        if (prev >= optionsLength - 1) return 0
+      setCurrentOption((prev) => {
+        evt.preventDefault();
+        if (prev >= optionsLength - 1) return 0;
 
-        return prev + 1
-      })
+        return prev + 1;
+      });
     } else if (key === "ArrowUp") {
-      setCurrentOption(prev => {
-        evt.preventDefault()
-        if (prev <= 0) return optionsLength - 1
+      setCurrentOption((prev) => {
+        evt.preventDefault();
+        if (prev <= 0) return optionsLength - 1;
 
-        return prev - 1
-      })
+        return prev - 1;
+      });
     } else if (key === "Enter") {
-      evt.preventDefault()
-      setCurrentOption(prev => {
-        submit(prev)
-        return prev
-      })
+      evt.preventDefault();
+      setCurrentOption((prev) => {
+        submit(prev);
+        return prev;
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    document.addEventListener("keydown", keydownEventHandler)
+    document.addEventListener("keydown", keydownEventHandler);
 
-    return () => document.removeEventListener("keydown", keydownEventHandler)
-  }, [optionsLength])
+    return () => document.removeEventListener("keydown", keydownEventHandler);
+  }, [optionsLength, isActive]);
 
-  const resetCurrentOption = () => setCurrentOption(startIdx)
+  const resetCurrentOption = () => setCurrentOption(startIdx);
 
-  return [currentOption, resetCurrentOption]
+  return [currentOption, resetCurrentOption];
 }

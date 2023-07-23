@@ -57,7 +57,9 @@ export default function Searchbar(props) {
           );
         }
       }
-    }
+    },
+    undefined,
+    searchInputFocus || focusInput
   );
   // scroll focused option (from UP/DOWN arrow) into view if needed
   useEffect(() => {
