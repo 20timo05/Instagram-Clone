@@ -7,24 +7,17 @@ import WriteComment from "../Post/WriteComment";
 import AudioRecorder from "./AudioRecorder";
 import styles from "./chatStyles.module.css";
 
-import { fetchData } from "../../hooks/useFetch";
-import usePusher from "../../hooks/usePusher";
-
-export default function Chat({ openChatId, data, currentLoggedInUser }) {
+export default function Chat({
+  messageArrays,
+  setChatsData,
+  setIsTyping,
+  sendMessage,
+  typingUser,
+  currentLoggedInUser,
+  onlineUsers,
+}) {
   const chatMsgWrapperRef = useRef(null);
-  const [chatsData, setChatsData] = useChatsData(data, openChatId);
-  const [isTyping, setIsTyping] = useState(null);
-
   const [recording, setRecording] = useState(false);
-
-  const [pusherChatsData, sendMessage, typingUser] = usePusher(
-    chatsData,
-    openChatId,
-    currentLoggedInUser.username,
-    isTyping
-  );
-
-  const messageArrays = structureMessages(pusherChatsData, openChatId);
 
   const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
@@ -154,70 +147,4 @@ export default function Chat({ openChatId, data, currentLoggedInUser }) {
       )}
     </section>
   );
-}
-
-function structureMessages(chatsData, openChatId) {
-  // group chat messages by the day of creation
-  let messageArrays = [];
-
-  const { chatMessages } = chatsData.find(({ id }) => id === openChatId)
-  if (chatMessages) {
-    const messageGroups = {};
-    for (const message of chatMessages) {
-      const dateKey = message.created_at.substring(0, 10);
-      if (!messageGroups[dateKey]) messageGroups[dateKey] = [];
-      messageGroups[dateKey].push(message);
-    }
-    // convert the map with all message groups from all days to a 2d array
-    messageArrays = Object.values(messageGroups);
-
-    // group messages by sender
-    messageArrays = messageArrays.map((messagesOfOneDay) => {
-      const senderGroupMessageArray = [[messagesOfOneDay[0]]];
-      for (let i = 1; i < messagesOfOneDay.length; i++) {
-        if (
-          messagesOfOneDay[i].username ===
-          senderGroupMessageArray[senderGroupMessageArray.length - 1][0]
-            .username
-        ) {
-          senderGroupMessageArray[senderGroupMessageArray.length - 1].push(
-            messagesOfOneDay[i]
-          );
-        } else {
-          senderGroupMessageArray.push([messagesOfOneDay[i]]);
-        }
-      }
-      return senderGroupMessageArray;
-    });
-  }
-
-  return messageArrays;
-}
-
-function useChatsData(data, openChatId) {
-  const [chatsData, setChatsData] = useState(data);
-
-  async function fetchMessages(id) {
-    const { ok, data, error } = await fetchData(
-      "GET",
-      "/api/inbox/getChatMessages",
-      { chatId: id }
-    );
-    if (!ok) return console.log(error);
-
-    setChatsData((prev) => {
-      const newPrev = [...prev];
-      newPrev.find(({ id }) => id === openChatId).chatMessages = data;
-      return newPrev;
-    });
-  }
-
-  useEffect(() => {
-    if (chatsData.find(({ id }) => id === openChatId).chatMessages) return;
-
-    // fetch chat Messages
-    fetchMessages(openChatId);
-  }, [openChatId]);
-
-  return [chatsData, setChatsData];
 }

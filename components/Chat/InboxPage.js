@@ -6,6 +6,7 @@ import Button from "../little/Button";
 import Chat from "./Chat";
 
 import formatTime from "../../lib/formatTime";
+import useChat from "./useChat";
 
 export default function InboxPage(props) {
   const [openChatId, setOpenChatId] = useState(props.openChatId);
@@ -14,6 +15,14 @@ export default function InboxPage(props) {
     openChatId !== null &&
     props.data.find(({ id }) => id === openChatId).group_members;
   const openedChatName = openedChatUsers && getChatName(openedChatUsers);
+
+  const { onlineUsers, ...chatProps } = useChat(
+    openChatId,
+    props.data,
+    props.currentLoggedInUser
+  );
+
+  console.log(onlineUsers)
 
   return (
     <div className={styles.wrapper}>
@@ -34,7 +43,9 @@ export default function InboxPage(props) {
         {props.data.map((chat, idx) => (
           <div
             key={chat.id}
-            className={`${styles.chat} ${chat.id === openChatId && styles.active}`}
+            className={`${styles.chat} ${
+              chat.id === openChatId && styles.active
+            }`}
             onClick={() => setOpenChatId(chat.id)}
           >
             <ChatProfileImage users={chat.group_members} />
@@ -47,11 +58,7 @@ export default function InboxPage(props) {
         ))}
       </aside>
       {openChatId !== null ? (
-        <Chat
-          openChatId={openChatId}
-          data={props.data}
-          currentLoggedInUser={props.currentLoggedInUser}
-        />
+        <Chat {...chatProps} />
       ) : (
         <section>
           <div className={styles.startChat}>
