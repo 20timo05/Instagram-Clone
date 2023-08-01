@@ -2,7 +2,7 @@ import executeQuery from "../../../database/executeQuery";
 
 import shuffle from "../../../lib/shuffle";
 
-export async function getData(userId, lazyLoadIteration = 0) {
+export async function getData(userId) {
   const query = `
     SELECT
       chat_groups.id,
@@ -32,14 +32,13 @@ export async function getData(userId, lazyLoadIteration = 0) {
       ON latest_message.sender_user_id = latest_sender.id
     WHERE chat_group_members.user_id = ?
     ORDER BY latest_message.created_at DESC
-    LIMIT 10
-    OFFSET ?;
+    LIMIT 10;
     ;
   `;
 
   const result = await executeQuery({
     query,
-    values: [userId, parseInt(lazyLoadIteration) * 10],
+    values: [userId],
   });
 
   if (result.error) {
@@ -93,8 +92,8 @@ export default async function handler(req, res) {
   if (req.method !== "GET")
     return res.status(405).json({ error: "This method requires GET!" });
 
-  const { userId, lazyLoadIteration } = req.query;
-  const [error, data] = await getData(userId, lazyLoadIteration);
+  const { userId } = req.query;
+  const [error, data] = await getData(userId);
 
   if (error) return res.status(data.code).json({ error: data.err });
   res.status(200).json(data);

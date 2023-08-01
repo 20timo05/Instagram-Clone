@@ -144,3 +144,24 @@
   position: absolute;
   translate: 25% -25%;
 }
+
+.chatNameWrapper > span {
+  position: relative;
+  padding-right: 1rem;
+}
+
+.chatNameWrapper > span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  translate: -50% -50%;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.chatNameWrapper > span.online::after {
+  background: var(--green);
+}

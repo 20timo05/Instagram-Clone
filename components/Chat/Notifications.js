@@ -10,7 +10,7 @@ export default function Notifications({ currentLoggedInUser }) {
   const [chatsData, setChatsData, loading, error] = useFetch(
     "GET",
     "/api/inbox/getChats",
-    { userId: currentLoggedInUser.id, lazyLoadIteration: 0 }
+    { userId: currentLoggedInUser.id }
   );
 
   const [chats, sendMessage] = usePusher(

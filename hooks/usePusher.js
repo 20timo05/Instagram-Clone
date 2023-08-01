@@ -16,6 +16,8 @@ export default function usePusher(
     .filter((user) => user.chatId === currentChatId && user.username !== sender)
     .slice(-1)[0]?.username;
 
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
   useEffect(() => {
     if (chatsData === null) return;
 
@@ -33,6 +35,9 @@ export default function usePusher(
           : incomingMessage(data, setChats)
       );
       channel.bind("typing-notification", incomingTypingNotificationHandler);
+      channel.bind("online-notif", ({ sender, isOnline }) =>
+        onlineNotifHandler(sender, isOnline)
+      );
     });
 
     return () => {
@@ -95,7 +100,24 @@ export default function usePusher(
     if (isTyping !== null) sendTypingNotification(isTyping);
   }, [isTyping]);
 
-  return [chats, sendMessage, typingUser];
+  async function onlineNotifHandler(username, isOnline, receiver) {
+    setOnlineUsers((prev) => {
+      if (!prev.includes(username) && isOnline) {
+        return [...prev, username];
+      }
+      if (prev.includes(username) && !isOnline) {
+        return prev.filter((user) => user !== username);
+      }
+      return prev;
+    });
+
+    // inform sender who just came online, that I'm already online
+    if (!receiver && receiver !== sender) {
+      await fetchData("POST", "/api/inbox/pusherOnlineNotif", { receiver: username, isOnline: true })
+    }
+  }
+
+  return [chats, sendMessage, typingUser, onlineUsers];
 }
 
 function incomingMessage(data, setChats) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 
 import styles from "./inboxPageStyles.module.css";
 import ChatProfileImage from "./ChatProfileImage";
@@ -11,19 +11,17 @@ import useChat from "./useChat";
 export default function InboxPage(props) {
   const [openChatId, setOpenChatId] = useState(props.openChatId);
 
-  const openedChatUsers =
-    openChatId !== null &&
-    props.data.find(({ id }) => id === openChatId).group_members;
-  const openedChatName = openedChatUsers && getChatName(openedChatUsers);
-
-  const { onlineUsers, ...chatProps } = useChat(
+  const { onlineUsers = [], ...chatProps } = useChat(
     openChatId,
     props.data,
     props.currentLoggedInUser
   );
 
-  console.log(onlineUsers)
-
+  const openedChatUsers =
+    openChatId !== null &&
+    props.data.find(({ id }) => id === openChatId).group_members;
+  const openedChatName = openedChatUsers && getChatName(openedChatUsers, onlineUsers);
+  
   return (
     <div className={styles.wrapper}>
       <div>
@@ -34,7 +32,7 @@ export default function InboxPage(props) {
         {openChatId !== null && (
           <>
             <ChatProfileImage users={openedChatUsers} />
-            <span>{openedChatName}</span>
+            <span className={styles.chatNameWrapper}>{openedChatName}</span>
             <i className="fa-solid fa-video"></i>
           </>
         )}
@@ -49,7 +47,7 @@ export default function InboxPage(props) {
             onClick={() => setOpenChatId(chat.id)}
           >
             <ChatProfileImage users={chat.group_members} />
-            <span>{getChatName(chat.group_members)}</span>
+            <span className={styles.chatNameWrapper}>{getChatName(chat.group_members, onlineUsers)}</span>
             <span>
               {chat.group_members.length > 1 ? `${chat.username}: ` : ""}
               {chat.value} • {formatTime(new Date(chat.created_at))}
@@ -78,8 +76,25 @@ export default function InboxPage(props) {
   );
 }
 
-function getChatName(users) {
-  if (users.length === 1) return users[0];
-  if (users.length === 2) return `${users[0]} und ${users[1]}`;
-  return users.join(", ");
+function getChatName(users, onlineUsers = []) {
+  const usernameJSX = (username) => (
+    <span className={onlineUsers.includes(username) ? styles.online : ""}>
+      {username}
+    </span>
+  );
+  if (users.length === 1) return usernameJSX(users[0]);
+  if (users.length === 2) {
+    return (
+      <>
+        {usernameJSX(users[0])} und {usernameJSX(users[1])}
+      </>
+    );
+  }
+
+  return users.map((username, idx) => (
+    <Fragment key={username}>
+      {idx > 0 && ", "}
+      {usernameJSX(username)}
+    </Fragment>
+  ));
 }
